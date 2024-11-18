@@ -3,49 +3,29 @@
 package main
 
 import (
-	"GoExperiments/errors_experiments"
-	"errors"
+	"GoExperiments/dfu_klubadmin/External/Klubadmin"
 	"fmt"
 )
 
 func main() {
-
-	fmt.Println("My Testing")
-	testError(giveMeMyError(0))
-	testError(giveMeMyError(1))
-	testError(giveMeMyError(2))
-	testError(giveMeMyError(3))
-}
-
-func testError(theError error) {
-	fmt.Println("===========================================================================")
-	if theError == nil {
-		fmt.Printf("Test of error:\nType:%T\n", theError)
-		return
+	fmt.Println("Go Experiments yay")
+	fmt.Println("===========")
+	search, err := Klubadmin.Search("Lenschow")
+	for i, value := range search {
+		fmt.Printf("SearchResult Person[%v]:%+v\n", i, value)
 	}
+	fmt.Println("===========")
+	searchFirst := search[0]
+	person, err := Klubadmin.GetPerson(searchFirst)
+	fmt.Printf("GetPerson for:%+v\nResult:%+v\nErr:%v\n", searchFirst, person, err)
+	fmt.Println("===========")
 
-	fmt.Printf("Test of error:\nType:%T\nValue:%v\nError:%v\nTest results:\n", theError, theError, theError.Error())
-
-	a1, b1 := errors_experiments.IsErrorMyWonderfulValueErrorByValueType(theError)
-	fmt.Printf("IsErrorMyWonderfulValueErrorByValueType=%v - %v\n", a1, b1)
-
-	a2, b2 := errors_experiments.IsErrorMyWonderfulValueErrorByPointerType(theError)
-	fmt.Printf("IsErrorMyWonderfulValueErrorByPointerType=%v - %v\n", a2, b2)
-
-	a3, b3 := errors_experiments.IsErrorMyWonderfulPointerErrorByPointerType(theError)
-	fmt.Printf("IsErrorMyWonderfulPointerErrorByPointerType=%v - %v\n", a3, b3)
-
-	a4, b4 := errors_experiments.IsErrorMyWonderfulPointerErrorByPointerToPointerType(theError)
-	fmt.Printf("IsErrorMyWonderfulPointerErrorByPointerToPointerType=%v - %v\n", a4, b4)
-}
-
-func giveMeMyError(typeOfErrorToGive int) error {
-	if typeOfErrorToGive == 0 {
-		return errors_experiments.MyWonderfulValueError{Msg: "I use a value receiver"}
-	} else if typeOfErrorToGive == 1 {
-		return &errors_experiments.MyWonderfulPointerError{Msg: "I use a pointer receiver"}
-	} else if typeOfErrorToGive == 2 {
-		return errors.New("my random error")
+	persons, err := Klubadmin.SearchAll("Lund")
+	for i, value := range persons {
+		fmt.Printf("SearchAll Person[%v]:%+v\n", i, value)
 	}
-	return nil
+	fmt.Println("===========")
+	fmt.Println("DONE")
+
+	//errors_experiments.RunErrorsAsTests()
 }

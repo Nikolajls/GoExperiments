@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestIsErrorMyWonderfulValueErrorByValueType(t *testing.T) {
+func Test_errorAsMyWonderfulValueErrorByValueType(t *testing.T) {
 	var tests = []struct {
 		theError             error
 		expectedResult       bool
@@ -25,7 +25,7 @@ func TestIsErrorMyWonderfulValueErrorByValueType(t *testing.T) {
 	for _, tt := range tests {
 		testName := fmt.Sprintf("%v", tt.theError)
 		t.Run(testName, func(t *testing.T) {
-			result, resultString := IsErrorMyWonderfulValueErrorByValueType(tt.theError)
+			result, resultString := errorAsMyWonderfulValueErrorByValueType(tt.theError)
 			assert.Equal(t, tt.expectedResult, result, testName)
 			assert.Equal(t, tt.expectedResultString, resultString, testName)
 
@@ -33,7 +33,7 @@ func TestIsErrorMyWonderfulValueErrorByValueType(t *testing.T) {
 	}
 }
 
-func TestIsErrorMyWonderfulValueErrorByPointerType(t *testing.T) {
+func Test_errorAsMyWonderfulValueErrorByPointerType(t *testing.T) {
 	var tests = []struct {
 		theError             error
 		expectedResult       bool
@@ -51,14 +51,14 @@ func TestIsErrorMyWonderfulValueErrorByPointerType(t *testing.T) {
 	for _, tt := range tests {
 		testName := fmt.Sprintf("%v", tt.theError)
 		t.Run(testName, func(t *testing.T) {
-			result, resultString := IsErrorMyWonderfulValueErrorByPointerType(tt.theError)
+			result, resultString := errorAsMyWonderfulValueErrorByPointerType(tt.theError)
 			assert.Equal(t, tt.expectedResult, result, testName)
 			assert.Equal(t, tt.expectedResultString, resultString, testName)
 		})
 	}
 }
 
-func TestIsErrorMyWonderfulPointerErrorByPointerToPointerType(t *testing.T) {
+func Test_errorAsMyWonderfulPointerErrorByPointerToPointerType(t *testing.T) {
 	var tests = []struct {
 		theError             error
 		expectedResult       bool
@@ -75,14 +75,14 @@ func TestIsErrorMyWonderfulPointerErrorByPointerToPointerType(t *testing.T) {
 	for _, tt := range tests {
 		testName := fmt.Sprintf("%v", tt.theError)
 		t.Run(testName, func(t *testing.T) {
-			result, resultString := IsErrorMyWonderfulPointerErrorByPointerToPointerType(tt.theError)
+			result, resultString := errorAsMyWonderfulPointerErrorByPointerToPointerType(tt.theError)
 			assert.Equal(t, tt.expectedResult, result, testName)
 			assert.Equal(t, tt.expectedResultString, resultString, testName)
 		})
 	}
 }
 
-func TestIsErrorMyWonderfulPointerErrorByPointerType(t *testing.T) {
+func Test_errorAsMyWonderfulPointerErrorByPointerType(t *testing.T) {
 	var tests = []struct {
 		theError             error
 		expectedResult       bool
@@ -99,7 +99,7 @@ func TestIsErrorMyWonderfulPointerErrorByPointerType(t *testing.T) {
 	for _, tt := range tests {
 		testName := fmt.Sprintf("%v", tt.theError)
 		t.Run(testName, func(t *testing.T) {
-			result, resultString := IsErrorMyWonderfulPointerErrorByPointerType(tt.theError)
+			result, resultString := errorAsMyWonderfulPointerErrorByPointerType(tt.theError)
 			assert.Equal(t, tt.expectedResult, result, testName)
 			assert.Equal(t, tt.expectedResultString, resultString, testName)
 		})

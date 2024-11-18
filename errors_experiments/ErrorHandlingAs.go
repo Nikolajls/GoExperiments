@@ -5,27 +5,38 @@ import (
 	"fmt"
 )
 
-type MyWonderfulValueError struct {
-	Msg string
+func RunErrorsAsTests() {
+	runErrorsAs(giveMeMyError(0))
+	runErrorsAs(giveMeMyError(1))
+	runErrorsAs(giveMeMyError(2))
+	runErrorsAs(giveMeMyError(3))
 }
 
-func (e MyWonderfulValueError) Error() string {
-	s := fmt.Sprintf("%v", e.Msg)
-	return s
-}
+func runErrorsAs(theError error) {
+	fmt.Println("===========================================================================")
+	if theError == nil {
+		fmt.Printf("Test of error:\nType:%T\n", theError)
+		return
+	}
 
-type MyWonderfulPointerError struct {
-	Msg string
-}
+	fmt.Printf("Test of error:\nType:%T\nValue:%v\nError:%v\nTest results:\n", theError, theError, theError.Error())
 
-func (e *MyWonderfulPointerError) Error() string {
-	s := fmt.Sprintf("%v", e.Msg)
-	return s
+	a1, b1 := errorAsMyWonderfulValueErrorByValueType(theError)
+	fmt.Printf("IsErrorMyWonderfulValueErrorByValueType=%v - %v\n", a1, b1)
+
+	a2, b2 := errorAsMyWonderfulValueErrorByPointerType(theError)
+	fmt.Printf("IsErrorMyWonderfulValueErrorByPointerType=%v - %v\n", a2, b2)
+
+	a3, b3 := errorAsMyWonderfulPointerErrorByPointerType(theError)
+	fmt.Printf("IsErrorMyWonderfulPointerErrorByPointerType=%v - %v\n", a3, b3)
+
+	a4, b4 := errorAsMyWonderfulPointerErrorByPointerToPointerType(theError)
+	fmt.Printf("IsErrorMyWonderfulPointerErrorByPointerToPointerType=%v - %v\n", a4, b4)
 }
 
 //Handling of MyWonderfulValueError which is a value type error
 
-func IsErrorMyWonderfulValueErrorByValueType(theError error) (bool, string) {
+func errorAsMyWonderfulValueErrorByValueType(theError error) (bool, string) {
 	var targetV MyWonderfulValueError = MyWonderfulValueError{}
 	if theError == nil {
 		return false, ""
@@ -37,7 +48,7 @@ func IsErrorMyWonderfulValueErrorByValueType(theError error) (bool, string) {
 	return false, ""
 }
 
-func IsErrorMyWonderfulValueErrorByPointerType(theError error) (bool, string) {
+func errorAsMyWonderfulValueErrorByPointerType(theError error) (bool, string) {
 	if theError == nil {
 		return false, ""
 	}
@@ -52,7 +63,7 @@ func IsErrorMyWonderfulValueErrorByPointerType(theError error) (bool, string) {
 
 // IsErrorMyWonderfulPointerErrorByPointerType
 // This can give run time errors that can be recovered. The error type is a pointer receiver and the type checking towards is a pointer to the type.
-func IsErrorMyWonderfulPointerErrorByPointerType(theError error) (success bool, returning string) {
+func errorAsMyWonderfulPointerErrorByPointerType(theError error) (success bool, returning string) {
 	defer func() {
 		if r := recover(); r != nil {
 			success = false
@@ -76,7 +87,7 @@ func IsErrorMyWonderfulPointerErrorByPointerType(theError error) (success bool, 
 	return false, ""
 }
 
-func IsErrorMyWonderfulPointerErrorByPointerToPointerType(theError error) (bool, string) {
+func errorAsMyWonderfulPointerErrorByPointerToPointerType(theError error) (bool, string) {
 	if theError == nil {
 		return false, ""
 	}
