@@ -9,7 +9,7 @@ type InMemoryJokes struct {
 	jokes []string
 }
 
-func NewInMemoryJokeService(initialJokes ...string) (inmemoryJokes JokeService) {
+func NewInMemoryJokeService(initialJokes ...string) (jokeService JokeService) {
 	var jokes []string
 	for _, joke := range initialJokes {
 		jokes = append(jokes, joke)
