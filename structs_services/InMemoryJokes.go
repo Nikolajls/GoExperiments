@@ -9,7 +9,7 @@ type InMemoryJokes struct {
 	jokes []string
 }
 
-func NewInMemoryJokeService(initialJokes ...string) (jokeService JokeService) {
+func NewInMemoryJokeService(initialJokes ...string) (jokeService *InMemoryJokes) {
 	var jokes []string
 	for _, joke := range initialJokes {
 		jokes = append(jokes, joke)
@@ -22,46 +22,46 @@ func NewInMemoryJokeService(initialJokes ...string) (jokeService JokeService) {
 	return service
 }
 
-func (inmemoryJoke *InMemoryJokes) GiveMeAJoke() (joke string, err error) {
-	randomInt := rand.IntN(len(inmemoryJoke.jokes))
-	joke, err = inmemoryJoke.GiveMeJokeAtIndex(randomInt)
+func (inMemoryJoke *InMemoryJokes) GiveMeAJoke() (joke string, err error) {
+	randomInt := rand.IntN(len(inMemoryJoke.jokes))
+	joke, err = inMemoryJoke.GiveMeJokeAtIndex(randomInt)
 	return joke, err
 }
 
-func (inmemoryJoke *InMemoryJokes) GiveMeJokeAtIndex(jokeIndex int) (joke string, err error) {
-	jokeCount := len(inmemoryJoke.jokes)
+func (inMemoryJoke *InMemoryJokes) GiveMeJokeAtIndex(jokeIndex int) (joke string, err error) {
+	jokeCount := len(inMemoryJoke.jokes)
 
 	if jokeCount == 0 {
-		return "", fmt.Errorf("Joke service does not contain a joke")
+		return "", fmt.Errorf("joke service does not contain a joke")
 	}
 
 	if jokeIndex > jokeCount-1 {
-		return "", fmt.Errorf("Joke service does not contain joke at that index %v, max is %v", jokeIndex, jokeCount)
+		return "", fmt.Errorf("joke service does not contain joke at that index %v, max is %v", jokeIndex, jokeCount)
 	}
-	return inmemoryJoke.jokes[jokeIndex], nil
+	return inMemoryJoke.jokes[jokeIndex], nil
 }
 
-func (inmemoryJoke *InMemoryJokes) RemoveJokeAtIndex(jokeIndex int) (err error) {
-	jokeCount := len(inmemoryJoke.jokes)
+func (inMemoryJoke *InMemoryJokes) RemoveJokeAtIndex(jokeIndex int) (err error) {
+	jokeCount := len(inMemoryJoke.jokes)
 
 	if jokeCount == 0 {
-		return fmt.Errorf("Joke service does not contain a joke")
+		return fmt.Errorf("joke service does not contain a joke")
 	}
 
 	if jokeIndex > jokeCount-1 {
-		return fmt.Errorf("Joke service does not contain joke at that index %v, max is %v", jokeIndex, jokeCount)
+		return fmt.Errorf("joke service does not contain joke at that index %v, max is %v", jokeIndex, jokeCount)
 	}
-	inmemoryJoke.jokes = removeIndexFromSlice(inmemoryJoke.jokes, jokeIndex)
+	inMemoryJoke.jokes = removeIndexFromSlice(inMemoryJoke.jokes, jokeIndex)
 	return nil
 }
 
-func (inmemoryJoke *InMemoryJokes) JokeCount() (jokeCount int, err error) {
+func (inMemoryJoke *InMemoryJokes) JokeCount() (jokeCount int, err error) {
 
-	return len(inmemoryJoke.jokes), nil
+	return len(inMemoryJoke.jokes), nil
 }
 
-func (inmemoryJoke *InMemoryJokes) AddJoke(joke string) (err error) {
-	inmemoryJoke.jokes = append(inmemoryJoke.jokes, joke)
+func (inMemoryJoke *InMemoryJokes) AddJoke(joke string) (err error) {
+	inMemoryJoke.jokes = append(inMemoryJoke.jokes, joke)
 	return nil
 }
 

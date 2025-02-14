@@ -14,7 +14,7 @@ type JokeStorage struct {
 	Jokes []string `json:"jokes"`
 }
 
-func NewStringJokesService(initialJokes ...string) (stringJokeService JokeService) {
+func NewStringJokesService(initialJokes ...string) (stringJokeService *StringJokes) {
 	var jokes []string
 	for _, joke := range initialJokes {
 		jokes = append(jokes, joke)
