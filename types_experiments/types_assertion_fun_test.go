@@ -46,7 +46,7 @@ func TestCalculateWingLoadSafeTypeAssertion(t *testing.T) {
 			args: args{
 				arg: Airfoil{
 					wingspan{sqft: 120},
-					"TEST",
+					PerformanceDesigns,
 				},
 				exitWeightLbs: 220,
 			},
@@ -121,7 +121,7 @@ func TestCalculateWingLoadSwitchTypeAssertion(t *testing.T) {
 			args: args{
 				arg: Airfoil{
 					wingspan{sqft: 120},
-					"TEST",
+					FluidWings,
 				},
 				exitWeightLbs: 220,
 			},
@@ -195,7 +195,7 @@ func TestCalculateWingLoadNotSafeTypeAssertion(t *testing.T) {
 			args: args{
 				arg: Airfoil{
 					wingspan{sqft: 120},
-					"TEST",
+					FluidWings,
 				},
 				exitWeightLbs: 220,
 			},

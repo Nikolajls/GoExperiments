@@ -13,9 +13,10 @@ type wingspan struct {
 // Airfoil struct embeds wingspan struct and thus has the property sqft under the wingspan base.
 type Airfoil struct {
 	wingspan
-	manufacturer string
+	manufacturer ParachuteManufacturer
 }
 
+// Methods
 func (w wingspan) CalculateWingload(exitWeightLbs int) float64 {
 	return CalculateWingload(w.sqft, exitWeightLbs)
 }

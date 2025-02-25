@@ -5,8 +5,8 @@ import (
 )
 
 func CalculateWingLoadSafeTypeAssertion(arg interface{}, exitWeightLbs int) (float64, error) {
-	if v, ok := arg.(wingspan); ok {
-		return v.CalculateWingload(exitWeightLbs), nil
+	if argType, ok := arg.(wingspan); ok {
+		return argType.CalculateWingload(exitWeightLbs), nil
 	}
 
 	if v, ok := arg.(Airfoil); ok {
