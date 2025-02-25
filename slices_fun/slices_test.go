@@ -130,7 +130,7 @@ func TestGetSubsetOfSlice(t *testing.T) {
 			args: args{
 				slice:    []string{"a", "b", "c", "d"},
 				startIdx: 2,
-				count:    2,
+				count:    3,
 			},
 			wantNewSlice: nil,
 			wantErr:      true,
