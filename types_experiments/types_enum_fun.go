@@ -19,7 +19,7 @@ var manufacturersAbbs = map[ParachuteManufacturer]string{
 	Jyro:               "JY",
 }
 
-func (w Airfoil) GetManufacturerAbbreviation() string {
+func (w Parachute) GetManufacturerAbbreviation() string {
 	if abb, foundInMap := manufacturersAbbs[w.manufacturer]; foundInMap {
 		return abb
 	}
@@ -27,7 +27,7 @@ func (w Airfoil) GetManufacturerAbbreviation() string {
 	return "NoAbbreviation"
 }
 
-func (w Airfoil) GetManufacturerPriority() int {
+func (w Parachute) GetManufacturerPriority() int {
 	switch w.manufacturer {
 	case PerformanceDesigns:
 		return 0
@@ -39,3 +39,14 @@ func (w Airfoil) GetManufacturerPriority() int {
 		return 3
 	}
 }
+
+type ParachuteLevel int
+
+const (
+	Beginner ParachuteLevel = iota
+	Novice
+	Intermediary
+	Advanced
+	HighPerformance
+	Competition
+)

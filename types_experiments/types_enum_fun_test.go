@@ -55,7 +55,7 @@ func TestAirfoil_GetManufacturerAbbreviation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			w := Airfoil{
+			w := Parachute{
 				wingspan:     tt.fields.wingspan,
 				manufacturer: tt.fields.manufacturer,
 			}
@@ -119,7 +119,7 @@ func TestAirfoil_GetManufacturerPriority(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			w := Airfoil{
+			w := Parachute{
 				wingspan:     tt.fields.wingspan,
 				manufacturer: tt.fields.manufacturer,
 			}

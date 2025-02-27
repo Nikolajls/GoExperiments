@@ -13,8 +13,8 @@ func (s *mySqftStruct) Sqft() int {
 func TestCalculateWingLoadSafeTypeAssertion(t *testing.T) {
 
 	type args struct {
-		arg           interface{}
-		exitWeightLbs int
+		arg          interface{}
+		exitWeightKg int
 	}
 	tests := []struct {
 		name    string
@@ -25,48 +25,50 @@ func TestCalculateWingLoadSafeTypeAssertion(t *testing.T) {
 		{
 			name: "Success with int",
 			args: args{
-				arg:           120,
-				exitWeightLbs: 220,
+				arg:          120,
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 
 		{
 			name: "Success with wingspan",
 			args: args{
-				arg:           wingspan{sqft: 120},
-				exitWeightLbs: 220,
+				arg:          wingspan{sqft: 120},
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 		{
-			name: "Success with airfoil ",
+			name: "Success with parachute ",
 			args: args{
-				arg: Airfoil{
+				arg: Parachute{
 					wingspan{sqft: 120},
 					PerformanceDesigns,
+					Competition,
+					false,
 				},
-				exitWeightLbs: 220,
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 		{
 			name: "Success with struct with an Sqft() method ",
 			args: args{
-				arg:           &mySqftStruct{sqft: 120},
-				exitWeightLbs: 220,
+				arg:          &mySqftStruct{sqft: 120},
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 		{
 			name: "Fails with string",
 			args: args{
-				arg:           "120",
-				exitWeightLbs: 220,
+				arg:          "120",
+				exitWeightKg: 100,
 			},
 			want:    0,
 			wantErr: true,
@@ -74,7 +76,7 @@ func TestCalculateWingLoadSafeTypeAssertion(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CalculateWingLoadSafeTypeAssertion(tt.args.arg, tt.args.exitWeightLbs)
+			got, err := CalculateWingLoadSafeTypeAssertion(tt.args.arg, tt.args.exitWeightKg)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CalculateWingLoadWithTypeAssertionOfWingspan() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -88,8 +90,8 @@ func TestCalculateWingLoadSafeTypeAssertion(t *testing.T) {
 
 func TestCalculateWingLoadSwitchTypeAssertion(t *testing.T) {
 	type args struct {
-		arg           interface{}
-		exitWeightLbs int
+		arg          interface{}
+		exitWeightKg int
 	}
 	tests := []struct {
 		name    string
@@ -100,47 +102,49 @@ func TestCalculateWingLoadSwitchTypeAssertion(t *testing.T) {
 		{
 			name: "Success with int",
 			args: args{
-				arg:           120,
-				exitWeightLbs: 220,
+				arg:          120,
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 
 		{
 			name: "Success with wingspan",
 			args: args{
-				arg:           wingspan{sqft: 120},
-				exitWeightLbs: 220,
+				arg:          wingspan{sqft: 120},
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 		{
 			name: "Success with airfoil ",
 			args: args{
-				arg: Airfoil{
+				arg: Parachute{
 					wingspan{sqft: 120},
 					FluidWings,
+					HighPerformance,
+					false,
 				},
-				exitWeightLbs: 220,
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		}, {
 			name: "Success with struct with an Sqft() method ",
 			args: args{
-				arg:           &mySqftStruct{sqft: 120},
-				exitWeightLbs: 220,
+				arg:          &mySqftStruct{sqft: 120},
+				exitWeightKg: 100,
 			},
-			want:    1.83,
+			want:    1.84,
 			wantErr: false,
 		},
 		{
 			name: "Fails with string",
 			args: args{
-				arg:           "120",
-				exitWeightLbs: 220,
+				arg:          "120",
+				exitWeightKg: 220,
 			},
 			want:    0,
 			wantErr: true,
@@ -148,7 +152,7 @@ func TestCalculateWingLoadSwitchTypeAssertion(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CalculateWingLoadSwitchTypeAssertion(tt.args.arg, tt.args.exitWeightLbs)
+			got, err := CalculateWingLoadSwitchTypeAssertion(tt.args.arg, tt.args.exitWeightKg)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CalculateWingLoadWithTypeAssertionOfWingspan() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -162,8 +166,8 @@ func TestCalculateWingLoadSwitchTypeAssertion(t *testing.T) {
 
 func TestCalculateWingLoadNotSafeTypeAssertion(t *testing.T) {
 	type args struct {
-		arg           interface{}
-		exitWeightLbs int
+		arg          interface{}
+		exitWeightKg int
 	}
 	tests := []struct {
 		name      string
@@ -175,29 +179,31 @@ func TestCalculateWingLoadNotSafeTypeAssertion(t *testing.T) {
 		{
 			name: "Success with wingspan",
 			args: args{
-				arg:           wingspan{sqft: 120},
-				exitWeightLbs: 220,
+				arg:          wingspan{sqft: 120},
+				exitWeightKg: 100,
 			},
-			want:      1.83,
+			want:      1.84,
 			wantPanic: true,
 		},
 		{
 			name: "Failure with int",
 			args: args{
-				arg:           120,
-				exitWeightLbs: 220,
+				arg:          120,
+				exitWeightKg: 100,
 			},
 			want:      0,
 			wantPanic: true,
 		},
 		{
-			name: "Failure with airfoil ",
+			name: "Failure with Parachute",
 			args: args{
-				arg: Airfoil{
+				arg: Parachute{
 					wingspan{sqft: 120},
 					FluidWings,
+					Intermediary,
+					false,
 				},
-				exitWeightLbs: 220,
+				exitWeightKg: 100,
 			},
 			want:      0,
 			wantPanic: true,
@@ -205,8 +211,8 @@ func TestCalculateWingLoadNotSafeTypeAssertion(t *testing.T) {
 		{
 			name: "Fails with string",
 			args: args{
-				arg:           "120",
-				exitWeightLbs: 220,
+				arg:          "120",
+				exitWeightKg: 100,
 			},
 			want:      0,
 			wantPanic: true,
@@ -220,7 +226,7 @@ func TestCalculateWingLoadNotSafeTypeAssertion(t *testing.T) {
 				}
 			}()
 
-			got := CalculateWingLoadNotSafeTypeAssertion(tt.args.arg, tt.args.exitWeightLbs)
+			got := CalculateWingLoadNotSafeTypeAssertion(tt.args.arg, tt.args.exitWeightKg)
 
 			if got != tt.want {
 				t.Errorf("CalculateWingLoadWithTypeAssertionOfWingspan() got = %v, want %v", got, tt.want)
