@@ -4,8 +4,6 @@
 name: Go CI build and test
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -28,12 +26,22 @@ jobs:
       run: go build -v ./...
 
     - name: Run tests with coverage
+      id: test
       run: |
         go test ./... -coverprofile=coverage.out
-        go tool cover -html=coverage.out -o coverage.html
-
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+        go tool cover -func=coverage.out > coverage.txt
+        echo "::set-output name=coverage::$(tail -n 10 coverage.txt | head -n 1 | awk '{print $3}')"
+        echo "::set-output name=coverage_details::$(cat coverage.txt)"
+    
+    - name: Post coverage report as a comment
+      uses: peter-evans/create-or-update-comment@v4
       with:
-        name: coverage-report
-        path: coverage.html
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ## Test Coverage Report
+          The overall test coverage is **${{ steps.test.outputs.coverage }}**.
+          
+          ### Coverage Details
+          ```
+          ${{ steps.test.outputs.coverage_details }}
+          ``` 
