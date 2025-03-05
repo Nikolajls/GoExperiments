@@ -31,13 +31,17 @@ jobs:
       run: |
         go test ./... -coverprofile=coverage.out 
         go tool cover -func=coverage.out > coverage.txt
-            
+        
         coverage=$(tail -n 1 coverage.txt  | awk '{print $3}')
+        coverage_details=$(cat coverage.txt)
         echo "Overall test coverage: $coverage"
-    
+        echo "Detailed test coverage: coverage_details"
+        
+        echo "setting coverage brief"
         echo "coverage=$coverage" >> $GITHUB_ENV
-        echo "coverage_details=$(cat coverage.txt)" >> $GITHUB_ENV
-    
+        echo "Setting details"
+        echo "coverage_details=$coverage_details" >> $GITHUB_ENV
+        echo "done setting"
     
 
     - name: Echo Coverage Result
