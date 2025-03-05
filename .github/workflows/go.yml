@@ -58,7 +58,7 @@ jobs:
       with:
         token: ${{ secrets.PAT_TOKEN }}
         issue-number: ${{ github.event.pull_request.number }}'
-        edit-mode: replace
+        edit-mode: append
         body: |
           ## Test Coverage Report
           The overall test coverage is **$${{ env.coverage }}**.
