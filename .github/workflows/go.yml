@@ -31,11 +31,12 @@ jobs:
       run: |
         go test ./... -coverprofile=coverage.out 
         go tool cover -func=coverage.out > coverage.txt
-        
+            
         coverage=$(tail -n 1 coverage.txt  | awk '{print $3}')
-        
         echo "Overall test coverage: $coverage"
+    
         echo "coverage=$coverage" >> $GITHUB_ENV
+        echo "coverage_details=$(cat coverage.txt)" >> $GITHUB_ENV
     
     
 
@@ -47,24 +48,13 @@ jobs:
       uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ secrets.PAT_TOKEN }}
-        issue-number: 1
+        issue-number: ${{ github.event.pull_request.number }}
         body: |
-          This is a multi-line test comment
-          - With GitHub **Markdown** :sparkles:
-          - Created by [create-or-update-comment][1]
-          [1]: https://github.com/peter-evans/create-or-update-comment
+          ## Test Coverage Report
+          The overall test coverage is **$${{ env.coverage }}**.
+          
+          ### Coverage Details
+          ```
+          ${{ env.coverage_details}}
+          ``` 
 
-
-#    
-#    - name: Post coverage report as a comment
-#      uses: peter-evans/create-or-update-comment@v4
-#      with:
-#        issue-number: ${{ github.event.pull_request.number }}
-#        body: |
-#          ## Test Coverage Report
-#          The overall test coverage is **${{ steps.test.outputs.coverage }}**.
-#          
-#          ### Coverage Details
-#          ```
-#          ${{ steps.test.outputs.coverage_details }}
-#          ``` 
