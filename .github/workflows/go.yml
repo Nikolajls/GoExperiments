@@ -33,17 +33,16 @@ jobs:
         go tool cover -func=coverage.out > coverage.txt
         
         coverage=$(tail -n 1 coverage.txt  | awk '{print $3}')
-        coverage_details=$(cat coverage.txt)
+        
         echo "Overall test coverage: $coverage"
-        echo "Detailed test coverage: coverage_details"
         
         echo "setting coverage brief"
         echo "coverage=$coverage" >> $GITHUB_ENV
+
         echo "Setting details"
-        
         {
           echo 'coverage_details<<EOF'
-          echo $coverage_details
+          cat coverage.txt
           echo EOF
         } >> "$GITHUB_ENV"
         
@@ -58,7 +57,8 @@ jobs:
       uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ secrets.PAT_TOKEN }}
-        issue-number: ${{ github.event.pull_request.number }}
+        issue-number: ${{ github.event.pull_request.number }}'
+        edit-mode: replace
         body: |
           ## Test Coverage Report
           The overall test coverage is **$${{ env.coverage }}**.
