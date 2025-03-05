@@ -40,7 +40,13 @@ jobs:
         echo "setting coverage brief"
         echo "coverage=$coverage" >> $GITHUB_ENV
         echo "Setting details"
-        echo "coverage_details=$coverage_details" >> $GITHUB_ENV
+        
+        {
+          echo 'coverage_details<<EOF'
+          echo $coverage_details
+          echo EOF
+        } >> "$GITHUB_ENV"
+        
         echo "done setting"
     
 
