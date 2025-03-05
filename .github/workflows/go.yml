@@ -25,23 +25,33 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Run tests with coverage
-      id: test
-      run: |
-        go test ./... -coverprofile=coverage.out
-        go tool cover -func=coverage.out > coverage.txt
-        echo "::set-output name=coverage::$(tail -n 10 coverage.txt | head -n 1 | awk '{print $3}')"
-        echo "::set-output name=coverage_details::$(cat coverage.txt)"
-    
-    - name: Post coverage report as a comment
+    - name: Create comment
       uses: peter-evans/create-or-update-comment@v4
       with:
-        issue-number: ${{ github.event.pull_request.number }}
+        issue-number: 1
         body: |
-          ## Test Coverage Report
-          The overall test coverage is **${{ steps.test.outputs.coverage }}**.
-          
-          ### Coverage Details
-          ```
-          ${{ steps.test.outputs.coverage_details }}
-          ``` 
+          This is a multi-line test comment
+          - With GitHub **Markdown** :sparkles:
+          - Created by [create-or-update-comment][1]
+          [1]: https://github.com/peter-evans/create-or-update-comment
+
+#    - name: Run tests with coverage
+#      id: test
+#      run: |
+#        go test ./... -coverprofile=coverage.out
+#        go tool cover -func=coverage.out > coverage.txt
+#        echo "::set-output name=coverage::$(tail -n 10 coverage.txt | head -n 1 | awk '{print $3}')"
+#        echo "::set-output name=coverage_details::$(cat coverage.txt)"
+#    
+#    - name: Post coverage report as a comment
+#      uses: peter-evans/create-or-update-comment@v4
+#      with:
+#        issue-number: ${{ github.event.pull_request.number }}
+#        body: |
+#          ## Test Coverage Report
+#          The overall test coverage is **${{ steps.test.outputs.coverage }}**.
+#          
+#          ### Coverage Details
+#          ```
+#          ${{ steps.test.outputs.coverage_details }}
+#          ``` 
