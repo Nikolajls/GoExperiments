@@ -5,10 +5,6 @@ import (
 	"time"
 )
 
-func DoChannelTests() {
-	TestChannelDirections()
-	//TestStructChannel()
-}
 func SendMessage[T any](aSendOnlyChannel chan<- T, message T) {
 	aSendOnlyChannel <- message
 	fmt.Printf("Sending message on channel %v\n", message)
