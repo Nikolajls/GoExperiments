@@ -4,8 +4,6 @@
 name: Go CI build and test
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -25,15 +23,48 @@ jobs:
       run: go mod tidy
 
     - name: Build
+      id: go_build
       run: go build -v ./...
 
     - name: Run tests with coverage
+      id: go_test
       run: |
-        go test ./... -coverprofile=coverage.out
-        go tool cover -html=coverage.out -o coverage.html
+        go test ./... -coverprofile=coverage.out 
+        go tool cover -func=coverage.out > coverage.txt
+        
+        coverage=$(tail -n 1 coverage.txt  | awk '{print $3}')
+        
+        echo "Overall test coverage: $coverage"
+        
+        echo "setting coverage brief"
+        echo "coverage=$coverage" >> $GITHUB_ENV
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+        echo "Setting details"
+        {
+          echo 'coverage_details<<EOF'
+          cat coverage.txt
+          echo EOF
+        } >> "$GITHUB_ENV"
+        
+        echo "done setting"
+    
+
+    - name: Echo Coverage Result
+      run: |
+        echo "Overall test coverage: ${{ env.coverage }}"
+
+    - name: Create comment
+      uses: peter-evans/create-or-update-comment@v4
       with:
-        name: coverage-report
-        path: coverage.html
+        token: ${{ secrets.PAT_TOKEN }}
+        issue-number: ${{ github.event.pull_request.number }}
+        edit-mode: append
+        body: |
+          ## Test Coverage Report
+          The overall test coverage is **$${{ env.coverage }}**.
+          
+          ### Coverage Details
+          ```
+          ${{ env.coverage_details}}
+          ``` 
+

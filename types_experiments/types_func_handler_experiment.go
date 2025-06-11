@@ -31,6 +31,15 @@ func (f HandlerFunc) GoOn(in *InRequest, out ResponseWriter) {
 	f(in, out)
 }
 
+func DoneHandler(a *InRequest, out ResponseWriter) {
+	fmt.Println("Running EndHandler")
+	out.Write("END")
+}
+func create() Handler {
+	internalHandler := HandlerFunc(DoneHandler)
+	return internalHandler
+}
+
 // Sample handlers
 func AddTest(next Handler) Handler {
 	fmt.Println("Creating Test Handler")

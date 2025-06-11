@@ -15,13 +15,13 @@ func (o *MockedResponseWriter) Write(toWrite string) {
 }
 
 func TestInvocation_Invoke_WithMiddlewares(t *testing.T) {
-	invocationSetup := CreateInvocation().AddMiddleware(AddTest)
+	invocationSetup := CreateInvocation().AddMiddleware(AddTest, AddXXX, AddABC)
 	invocation := invocationSetup.Handle(HandlePayload)
 	r := &MockedResponseWriter{}
 	invocation.Invoke("PayloadGoesHere", r)
 	fmt.Println(r.writes)
 	t.Log(r.writes)
-	assert.EqualValues(t, []string{"START", "Test", "Payload: PayloadGoesHere", "END"}, r.writes)
+	assert.EqualValues(t, []string{"START", "Test", "XXX", "ABC", "Payload: PayloadGoesHere", "END"}, r.writes)
 }
 
 func TestInvocation_Invoke_WithoutMiddlewares(t *testing.T) {
