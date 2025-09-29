@@ -85,7 +85,22 @@ func AppendVariadicValueToSlice(slice []string, appendValues ...string) []string
 }
 
 func AppendValueToSlice(slice []string, appendValue string) []string {
-
 	appendedSlice := append(slice, appendValue)
 	return appendedSlice
+}
+
+func RemoveIndexFromSlice(slice []string, index int) ([]string, error) {
+
+	sliceLen := len(slice)
+	if sliceLen == 0 {
+		return nil, errors.New("slice is empty")
+	}
+
+	if index > sliceLen-1 {
+		return nil, errors.New("start index is greater than length")
+	}
+
+	ret := make([]string, 0)
+	ret = append(ret, slice[:index]...)
+	return append(ret, slice[index+1:]...), nil
 }

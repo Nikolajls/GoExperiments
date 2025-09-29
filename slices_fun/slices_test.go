@@ -1,6 +1,8 @@
 package slices
 
 import (
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -378,8 +380,98 @@ func TestAppendVariadicValueToSlice(t *testing.T) {
 	}
 }
 
-func RemoveIndexFromSlice(s []string, index int) []string {
-	ret := make([]string, 0)
-	ret = append(ret, s[:index]...)
-	return append(ret, s[index+1:]...)
+func TestRangingOverSliceOfStructs_CreatesCopies(t *testing.T) {
+	type fields struct {
+		testString             string
+		testInt                int
+		modifiedFieldByRange   string
+		modifiedFieldByPointer string
+	}
+
+	testSlice := []fields{
+		{
+			testString:             "a",
+			testInt:                1,
+			modifiedFieldByRange:   "",
+			modifiedFieldByPointer: "",
+		},
+		{
+			testString:             "b",
+			testInt:                2,
+			modifiedFieldByRange:   "",
+			modifiedFieldByPointer: "",
+		},
+		{
+			testString:             "c",
+			testInt:                3,
+			modifiedFieldByRange:   "",
+			modifiedFieldByPointer: "",
+		},
+		{
+			testString:             "d",
+			testInt:                4,
+			modifiedFieldByRange:   "",
+			modifiedFieldByPointer: "",
+		},
+	}
+
+	for idx, entry := range testSlice {
+		pointerToEntryByRange := &entry
+		pointerToEntryByPointer := &testSlice[idx]
+		a := fmt.Sprintf("%p", pointerToEntryByRange)
+		b := fmt.Sprintf("%p", pointerToEntryByPointer)
+
+		fmt.Printf("idx: %d entry: %v pointerToEntryByPointer: %v pointerToEntryByRange address:%s pointerToEntryByPointer address:%s\n", idx, entry, pointerToEntryByPointer, a, b)
+		assert.NotEqual(t, a, b, "pointers should not be equal due to copying when using range")
+		entry.modifiedFieldByRange = entry.testString
+		pointerToEntryByPointer.modifiedFieldByPointer = entry.testString
+	}
+
+	for _, entry := range testSlice {
+		assert.Equal(t, "", entry.modifiedFieldByRange, "The modifiedFieldByRange field should be empty due to the range above using the entry which is a copied struct")
+		assert.Equal(t, entry.testString, entry.modifiedFieldByPointer, "The modified field should have a value since the value set above is on a pointer to the original slice struct")
+	}
+
+}
+
+func TestRemoveIndexFromSlice(t *testing.T) {
+	type args struct {
+		slice []string
+		index int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []string
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "Removes an entry from a slice by index and returns a new one",
+			args: args{
+				slice: []string{"a", "b", "c"},
+				index: 1,
+			},
+			want:    []string{"a", "c"},
+			wantErr: assert.NoError,
+		},
+		{
+			name: "Fails when the index is out of range",
+			args: args{
+				slice: []string{"a"},
+				index: 1,
+			},
+			want:    []string{},
+			wantErr: assert.Error,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := RemoveIndexFromSlice(tt.args.slice, tt.args.index)
+			if tt.wantErr(t, err, fmt.Sprintf("RemoveIndexFromSlice(%v, %v)", tt.args.slice, tt.args.index)) {
+				return
+			}
+
+			assert.Equalf(t, tt.want, got, "RemoveIndexFromSlice(%v, %v)", tt.args.slice, tt.args.index)
+		})
+	}
 }
